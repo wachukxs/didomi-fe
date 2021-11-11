@@ -13,6 +13,7 @@ export class BaseNavigationComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  // should be a shared service
   logOutUser(): void {
     sessionStorage.removeItem('domini_user_details')
     this.router.navigate(['/'])

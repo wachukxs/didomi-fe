@@ -5,9 +5,11 @@ import {
   Validators,
   FormControl,
 } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { CallerService } from '../services/caller.service';
+import { DeleteAccountDialogComponent } from '../delete-account-dialog/delete-account-dialog.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,7 +22,8 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private callerService: CallerService,
     private formBuilder: FormBuilder,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   notificationoptions: string[] = ['sms', 'email'];
@@ -82,5 +85,32 @@ export class DashboardComponent implements OnInit {
   // should be like a central messaging service
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action);
+  }
+
+  openDeleteAccountDialog(): void {
+    const dialogRef = this.dialog.open(DeleteAccountDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(`Deleteing`);
+        this.callerService.deleteUserAccount(this.user.email).subscribe(
+          (res: any) => {
+            console.log('account delete response', res);
+            if (res.status == 200) {
+              sessionStorage.removeItem('domini_user_details')
+              this.router.navigate(['/']) // show a snack bar, saying we're sorry to see you go
+            }
+          },
+          (err) => {
+            console.error('=> account delete  err', err);
+            this.openSnackBar(
+              "Please try again.",
+              'OK'
+            );
+            
+          }
+        )
+      }
+    });
   }
 }

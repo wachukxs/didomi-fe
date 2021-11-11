@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Whaooo!</h2>
+<mat-dialog-content class="mat-typography">
+    <h3>Careful now,</h3>
+    <p>
+       Are you sure you want to delete your account with us?
+    </p>
+  
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="start">
+    <button mat-button [mat-dialog-close]="false" cdkFocusInitial>Cancel</button>
+    <button mat-button [mat-dialog-close]="true" color="primary">Delete</button>
+  </mat-dialog-actions>

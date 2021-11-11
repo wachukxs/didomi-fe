@@ -30,6 +30,7 @@ import { IndexComponent } from './index/index.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
+import { DeleteAccountDialogComponent } from './delete-account-dialog/delete-account-dialog.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { SignupComponent } from './signup/signup.component';
     IndexComponent,
     DashboardComponent,
     LoginComponent,
-    SignupComponent
+    SignupComponent,
+    DeleteAccountDialogComponent
   ],
   imports: [
     BrowserModule,

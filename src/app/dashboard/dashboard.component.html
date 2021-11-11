@@ -1,11 +1,15 @@
 <section class="main">
-    <h1 class="mat-h1">Preference Center</h1>
+    <div class="top">
+        <h1 class="mat-h1">Preference Center</h1>
+
+        <button mat-raised-button (click)="openDeleteAccountDialog()" color="warn">
+            <span class="hidden-mobile">Delete account</span>
+            <mat-icon class="hidden-desktop" aria-label="Delete account icon">delete</mat-icon>
+        </button>
+    </div>
 
     <h4 class="mat-h4">Manage you choice regarding the channel you want to get notified on.</h4>
-    <p></p>
 
-    
-    
 
     <mat-card class="consent-card">
         <mat-card-content>

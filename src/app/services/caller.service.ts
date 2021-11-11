@@ -62,10 +62,20 @@ export class CallerService {
     );
   }
 
-  updateUserConsentPreference(userDetails: UserLoginDetails) {
+  updateUserConsentPreference(userDetails: any) {
     console.log('updating user consent perference', environment.baseURL + URLPaths.newUserEvent);
     
     return this.http.post(environment.baseURL + URLPaths.newUserEvent, userDetails, this.httpOptions)
+    .pipe(
+      retry(1), // retry a failed request up to 3 times
+      catchError(this.handleError) // then handle the error
+    );
+  }
+
+  deleteUserAccount(userEmail: string) {
+    console.log('deleting user account', environment.baseURL + URLPaths.deleteUser + userEmail);
+    
+    return this.http.delete(environment.baseURL + URLPaths.deleteUser + userEmail, this.httpOptions)
     .pipe(
       retry(1), // retry a failed request up to 3 times
       catchError(this.handleError) // then handle the error

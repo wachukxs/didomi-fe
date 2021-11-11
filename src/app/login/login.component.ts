@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
           if (res.status == 200) {
             sessionStorage.setItem(
               'domini_user_details',
-              JSON.stringify(res.body.dataValues)
+              JSON.stringify(res.body)
             );
             this.router.navigate(['/dashboard']);
           }
@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
             // sth happened and we don't know ... we're look into it.
             this.loginForm.get(['email'])?.setErrors({ invalidValue: true });
           } else {
-            // sth happened and we don't know ... we're look into it.
+            // sth happened and we don't know ... we're look into it. shoot out a notification, automated email, etc.
             this.openSnackBar(
               "Oops. Something happened. It's us, not you.",
               'Close'

@@ -49,7 +49,7 @@ export class SignupComponent implements OnInit {
           console.log('sign up response', res);
           if (res.status == 200 && res.statusText === "OK") {
 
-            sessionStorage.setItem('domini_user_details', JSON.stringify(res.body.dataValues))
+            sessionStorage.setItem('domini_user_details', JSON.stringify(res.body))
             this.router.navigate(['/dashboard'])
             
           }

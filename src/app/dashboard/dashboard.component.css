@@ -1,16 +1,35 @@
 div.checkboxes-grid-options {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 mat-checkbox.option:nth-child(odd) {
-    padding-right: 10px;
+  padding-right: 10px;
 }
 
 section.main {
-    margin: 25px;
+  margin: 25px;
 }
 
 mat-card.consent-card {
-    max-width: 300px;
+  max-width: 300px;
+}
+
+div.top {
+  display: flex;
+  justify-content: space-between;
+
+  margin-bottom: inherit;
+}
+
+@media (max-width: 767px) {
+  .hidden-mobile {
+    display: none;
+  }
+}
+
+@media (min-width: 767px) {
+  .hidden-desktop {
+    display: none;
+  }
 }
