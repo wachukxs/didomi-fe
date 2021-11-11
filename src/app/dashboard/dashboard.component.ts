@@ -48,6 +48,8 @@ export class DashboardComponent implements OnInit {
     this.consentFormGroup.valueChanges.subscribe((value) => {
       console.log(value);
 
+      // should we induce a delay so the api isn't called too much
+
       this.callerService.updateUserConsentPreference(value).subscribe(
         (res: any) => {
           console.log('event update response', res);

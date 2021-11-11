@@ -1,0 +1,28 @@
+div.main {
+  margin: 25px;
+}
+
+section {
+  min-height: calc(100vh - 5rem - 76px);
+}
+
+footer {
+  height: 1rem;
+}
+
+@media (max-width: 767px) {
+  .hidden-mobile {
+    display: none;
+  }
+}
+
+@media (min-width: 767px) {
+  .hidden-desktop {
+    display: none;
+  }
+}
+
+h1 span {
+    background-color: #4b2f6a;
+    color: orangered;
+}
