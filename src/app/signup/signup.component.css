@@ -1,0 +1,22 @@
+.signup-form-div {
+    display: flex;
+    flex-direction: column;
+
+    width: min-content;
+    margin: 0 auto;
+
+    margin-top: 5%;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+
+    row-gap: 5px;
+
+    margin-bottom: 10%;
+}
+
+a {
+    color: coral;
+}

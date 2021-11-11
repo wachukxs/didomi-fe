@@ -1,0 +1,43 @@
+<div class="login-form-div">
+
+
+    <h2>Login</h2>
+
+      <form [formGroup]="loginForm" name="log-in-form">
+        
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input type="email" formControlName="email" matInput>
+          <mat-error *ngIf="loginForm.get(['email'])?.hasError('invalidValue')">
+            <strong>Email</strong> account doesn't exist
+          </mat-error>
+          <mat-error *ngIf="loginForm.get(['email'])?.hasError('email') && !loginForm.get(['email'])?.hasError('required')">
+            Please enter a valid email address
+          </mat-error>
+          <mat-error *ngIf="loginForm.get(['email'])?.hasError('required')">
+            Email is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Password</mat-label>
+          <input #passwordInput formControlName="password" type="password" matInput>
+          <button matSuffix mat-icon-button type="button" aria-label="Toggle password visibility" (click)="togglePasswordInputIcon()">
+            <mat-icon>{{passwordInputIcon}}</mat-icon>
+          </button>
+          <mat-error *ngIf="loginForm.get(['password'])?.hasError('invalidValue')">
+            Incorrect <strong>password</strong>
+          </mat-error>
+          <mat-error *ngIf="loginForm.get(['password'])?.hasError('required')">
+            Password is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="loginForm.get(['password'])?.hasError('minlength') && !loginForm.get(['password'])?.hasError('required')">
+            Password must be at least 4 characters
+          </mat-error>
+        </mat-form-field>
+
+        <button type="submit" mat-raised-button (click)="logInButtonClick($event)" color="primary">Log in</button>
+      </form>
+
+
+
+  </div>

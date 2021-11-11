@@ -1,0 +1,67 @@
+<div class="signup-form-div">
+
+
+    <h2>Sign up</h2>
+
+    <form [formGroup]="signUpForm" class="m-l-30" name="sign-up-form">
+        <mat-form-field appearance="fill">
+            <mat-label>First name</mat-label>
+            <input formControlName="firstname" matInput>
+            <mat-error *ngIf="signUpForm.get(['firstname'])?.hasError('required')">
+                First name is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Last name</mat-label>
+            <input formControlName="lastname" matInput>
+            <mat-error *ngIf="signUpForm.get(['lastname'])?.hasError('required')">
+                Last name is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input type="email" formControlName="email" matInput>
+            <mat-error *ngIf="signUpForm.get(['email'])?.hasError('notUnique')">
+                <strong>Email</strong> already exists
+            </mat-error>
+            <mat-error
+                *ngIf="signUpForm.get(['email'])?.hasError('email') && !signUpForm.get(['email'])?.hasError('required')">
+                Please enter a valid email address
+            </mat-error>
+            <mat-error *ngIf="signUpForm.get(['email'])?.hasError('required')">
+                Email is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Password</mat-label>
+            <input #passwordInput formControlName="password" type="password" matInput>
+            <button matSuffix mat-icon-button type="button" aria-label="Toggle password visibility"
+                (click)="togglePasswordInputIcon()">
+                <mat-icon>{{passwordInputIcon}}</mat-icon>
+            </button>
+            <mat-error *ngIf="signUpForm.get(['password'])?.hasError('required')">
+                Password is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+
+
+        <mat-checkbox formControlName="accepttandc" required matInput color="primary">
+            <div>Accept Terms & Conditions.</div>
+        </mat-checkbox>
+        <mat-error
+            *ngIf="signUpForm.get(['accepttandc'])?.touched && signUpForm.get(['accepttandc'])?.hasError('required')">
+            T&Cs is <strong>required</strong>
+        </mat-error>
+        <a href="https://privacy.didomi.io/en/" target="_blank">Read T&Cs
+        </a>
+
+        <button type="submit" mat-raised-button (click)="signUpButtonClick($event)" color="primary">
+            Sign up
+        </button>
+    </form>
+
+
+
+</div>

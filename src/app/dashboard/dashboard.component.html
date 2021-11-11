@@ -1,0 +1,24 @@
+<section class="main">
+    <h1 class="mat-h1">Preference Center</h1>
+
+    <h4 class="mat-h4">Manage you choice regarding the channel you want to get notified on.</h4>
+    <p></p>
+
+    
+    
+
+    <mat-card class="consent-card">
+        <mat-card-content>
+            <p>Consent preference:</p>
+
+            <div class="checkboxes-grid-options" [formGroup]="consentOptionsFormGroup">
+                <mat-checkbox [formControlName]="option" color="primary" class="option"
+                    *ngFor="let option of notificationoptions">
+                    {{option}}
+                </mat-checkbox>
+            </div>
+
+        </mat-card-content>
+        
+      </mat-card>
+</section>

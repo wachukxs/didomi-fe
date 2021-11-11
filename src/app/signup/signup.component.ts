@@ -1,0 +1,80 @@
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { CallerService } from '../services/caller.service';
+
+@Component({
+  selector: 'app-signup',
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.css']
+})
+export class SignupComponent implements OnInit {
+
+  constructor(private router: Router, private callerService: CallerService, private _snackBar: MatSnackBar) { }
+
+  passwordInputIcon: string = 'visibility';
+
+  @ViewChild('passwordInput')
+  passwordInput!: ElementRef;
+
+  signUpForm = new FormGroup({
+      firstname: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      lastname: new FormControl('', Validators.required),
+      accepttandc: new FormControl('', [Validators.required])
+  });
+
+  ngOnInit(): void {
+  }
+
+  togglePasswordInputIcon(): void {
+    
+    if (this.passwordInputIcon == 'visibility') {
+      this.passwordInputIcon = 'visibility_off'
+      this.passwordInput.nativeElement.type = 'text'
+    } else {
+      this.passwordInputIcon = 'visibility'
+      this.passwordInput.nativeElement.type = 'password'
+    }
+  }
+
+  signUpButtonClick(evt: MouseEvent) {  
+    console.log('sign up botton', evt);
+    console.log('this.signUpForm.value', this.signUpForm.value);
+    if (this.signUpForm.valid) {
+      this.callerService.signUpUser(this.signUpForm.value).subscribe(
+        (res: any) => {
+          console.log('sign up response', res);
+          if (res.status == 200 && res.statusText === "OK") {
+
+            sessionStorage.setItem('domini_user_details', JSON.stringify(res.body.dataValues))
+            this.router.navigate(['/dashboard'])
+            
+          }
+        },
+        (err) => {
+          console.error('=> err', err);
+          
+          if (err.error.name == "SequelizeUniqueConstraintError" && err.error.fields.includes('email')) {
+            // set error in email input
+            this.signUpForm.get(['email'])?.setErrors({notUnique: true});
+          } else {
+            // sth happened and we don't know ... we're look into it.
+            this.openSnackBar("Oops. Something happened. It's us, not you.", "Close")
+          }
+        }
+      )
+    } else {
+      console.log('not signing up');
+      
+    }
+  }
+
+  // should be like a central messaging service
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action);
+  }
+
+}

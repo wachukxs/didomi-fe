@@ -1,0 +1,16 @@
+div.checkboxes-grid-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+mat-checkbox.option:nth-child(odd) {
+    padding-right: 10px;
+}
+
+section.main {
+    margin: 25px;
+}
+
+mat-card.consent-card {
+    max-width: 300px;
+}
