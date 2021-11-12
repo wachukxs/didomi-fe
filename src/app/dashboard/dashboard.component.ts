@@ -10,6 +10,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { CallerService } from '../services/caller.service';
 import { DeleteAccountDialogComponent } from '../delete-account-dialog/delete-account-dialog.component';
+import { Store } from '@ngrx/store';
+import { ConsentChangeEvent } from '../models/Event';
+import { EventState } from '../ngrx/app.state';
+import { Observable } from 'rxjs';
+import { EventActionTypes } from "../ngrx/actions/event.actions";
 
 @Component({
   selector: 'app-dashboard',
@@ -18,13 +23,29 @@ import { DeleteAccountDialogComponent } from '../delete-account-dialog/delete-ac
 })
 export class DashboardComponent implements OnInit {
 
+  eventsTrail: Observable<Array<ConsentChangeEvent>>;
+
   constructor(
     private router: Router,
     private callerService: CallerService,
     private formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
-    private dialog: MatDialog
-  ) {}
+    private dialog: MatDialog,
+    private store: Store<EventState>
+  ) {
+    this.eventsTrail = this.store.select(state => state.events);
+  }
+
+  addNewEvent(emailnotifications: boolean, smsnotifications: boolean) {
+    this.store.dispatch({
+      type: EventActionTypes.ADD_EVENT,
+      payload: <ConsentChangeEvent> {
+        emailnotifications: emailnotifications,
+        smsnotifications: smsnotifications,
+        email: this.user.email
+      }
+    });
+  }
 
   notificationoptions: string[] = ['sms', 'email'];
 
@@ -53,6 +74,8 @@ export class DashboardComponent implements OnInit {
 
     this.consentFormGroup.valueChanges.subscribe((value) => {
       console.log(value);
+
+      this.addNewEvent(value.consentoptions.email, value.consentoptions.sms)
 
       // should we induce a delay so the api isn't called too much
 

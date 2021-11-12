@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -34,6 +35,10 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { DeleteAccountDialogComponent } from './delete-account-dialog/delete-account-dialog.component';
 
+import { newEventReducer } from './ngrx/reducers/event.reducer';
+import { StoreModule } from '@ngrx/store';
+import { reducers } from './ngrx/reducers/index'
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,6 +65,7 @@ import { DeleteAccountDialogComponent } from './delete-account-dialog/delete-acc
     MatListModule,
     MatExpansionModule,
     LayoutModule,
+    MatTabsModule,
     MatSnackBarModule,
     MatProgressBarModule,
     MatCheckboxModule,
@@ -74,7 +80,9 @@ import { DeleteAccountDialogComponent } from './delete-account-dialog/delete-acc
       // Register the ServiceWorker as soon as the app is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
-    })
+    }),
+    // StoreModule.forRoot({event: newEventReducer}) // will fix later
+    StoreModule.forRoot(reducers)
   ],
   providers: [],
   bootstrap: [AppComponent]

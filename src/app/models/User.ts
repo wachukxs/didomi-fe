@@ -7,10 +7,3 @@ export interface UserSignUpDetails {
 }
 
 export type UserLoginDetails = Omit<UserSignUpDetails, "lastname" | "accepttandc" | "firstname">
-
-export interface ConsentChangeEvent {
-    emailnotifications: boolean,
-    smsnotifications: boolean,
-    email: string,
-    time: boolean
-}

@@ -7,7 +7,7 @@ mat-checkbox.option:nth-child(odd) {
   padding-right: 10px;
 }
 
-section.main {
+.main {
   margin: 25px;
 }
 

@@ -17,10 +17,7 @@ export class LoginComponent implements OnInit {
   ) {}
 
   loginForm = new FormGroup({
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(4),
-    ]),
+    password: new FormControl('', [ ]),
     email: new FormControl('', [Validators.required, Validators.email]),
   });
 
@@ -63,7 +60,8 @@ export class LoginComponent implements OnInit {
             // set error in email input
             this.loginForm.get(['password'])?.setErrors({ invalidValue: true });
           } else if (err.status == 401) {
-            // sth happened and we don't know ... we're look into it.
+            this.loginForm.get(['email'])?.setErrors({ invalidValue: true });
+          } else if (err.status == 422) {
             this.loginForm.get(['email'])?.setErrors({ invalidValue: true });
           } else {
             // sth happened and we don't know ... we're look into it. shoot out a notification, automated email, etc.

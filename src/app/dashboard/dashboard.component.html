@@ -1,82 +1,84 @@
 <section class="main">
-    <div class="top">
-        <h1 class="mat-h1">Preference Center</h1>
+  <div class="top">
+    <h1 class="mat-h1">Preference Center</h1>
 
-        <button mat-raised-button (click)="openDeleteAccountDialog()" color="warn">
-            <span class="hidden-mobile">Delete account</span>
-            <mat-icon class="hidden-desktop" aria-label="Delete account icon">delete</mat-icon>
-        </button>
-    </div>
-
-    <h4 class="mat-h4">Manage you choice regarding the channel you want to get notified on.</h4>
+    <button mat-raised-button (click)="openDeleteAccountDialog()" color="warn">
+      <span class="hidden-mobile">Delete account</span>
+      <mat-icon class="hidden-desktop" aria-label="Delete account icon">delete</mat-icon>
+    </button>
+  </div>
 
 
-    <mat-card class="consent-card">
-        <mat-card-content>
+  <mat-tab-group mat-align-tabs="start">
+    <mat-tab label="Preference">
+      <section class="main">
+        <h4 class="mat-h4">Manage you choice regarding the channel you want to get notified on.</h4>
+
+
+        <mat-card class="consent-card">
+          <mat-card-content>
             <p>Consent preference:</p>
 
             <div class="checkboxes-grid-options" [formGroup]="consentOptionsFormGroup">
-                <mat-checkbox [formControlName]="option" color="primary" class="option"
-                    *ngFor="let option of notificationoptions">
-                    {{option}}
-                </mat-checkbox>
+              <mat-checkbox [formControlName]="option" color="primary" class="option"
+                *ngFor="let option of notificationoptions">
+                {{option}}
+              </mat-checkbox>
             </div>
 
-        </mat-card-content>
-        
-      </mat-card>
+          </mat-card-content>
 
-      <mat-divider></mat-divider>
-
-      <mat-accordion>
-
-        <mat-expansion-panel (opened)="panelOpenState = true"
-                             (closed)="panelOpenState = false">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Event history
-            </mat-panel-title>
-            <mat-panel-description>
-              Click to {{panelOpenState ? 'close' : 'open'}}
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-          <div class="mat-panel-content">
-            <table mat-table [dataSource]="user?.consents" class="mat-elevation-z8">
-
-                <!--- Note that these columns can be defined in any order.
-                      The actual rendered columns are set as a property on the row definition" -->
-              
-                <!-- Position Column -->
-                <ng-container matColumnDef="age">
-                  <th mat-header-cell *matHeaderCellDef> Age </th>
-                  <td mat-cell *matCellDef="let element"> {{element.age}} </td>
-                </ng-container>
-              
-                <!-- Name Column -->
-                <ng-container matColumnDef="emailNotifications">
-                  <th mat-header-cell *matHeaderCellDef> EMAIL </th>
-                  <td mat-cell *matCellDef="let element"> {{element.emailNotifications}} </td>
-                </ng-container>
-              
-                <!-- Weight Column -->
-                <ng-container matColumnDef="id">
-                  <th mat-header-cell *matHeaderCellDef> ID </th>
-                  <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-                </ng-container>
-              
-                <!-- Symbol Column -->
-                <ng-container matColumnDef="smsNotifications">
-                  <th mat-header-cell *matHeaderCellDef> SMS </th>
-                  <td mat-cell *matCellDef="let element"> {{element.smsNotifications}} </td>
-                </ng-container>
-              
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-              </table>
-          </div>
-        </mat-expansion-panel>
-      </mat-accordion>
+        </mat-card>
 
 
-      
+      </section>
+    </mat-tab>
+
+    <mat-tab label="Overview">
+      <section class="main">
+
+        <div> {{ eventsTrail | async | json }} </div>
+
+        <h4 class="mat-h4">Review your event perference history.</h4>
+
+        <table mat-table [dataSource]="user?.consents" class="mat-elevation-z8">
+
+          <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+          <!-- Position Column -->
+          <ng-container matColumnDef="age">
+            <th mat-header-cell *matHeaderCellDef> Age </th>
+            <td mat-cell *matCellDef="let element"> {{element.age}} </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="emailNotifications">
+            <th mat-header-cell *matHeaderCellDef> EMAIL </th>
+            <td mat-cell *matCellDef="let element"> {{element.emailNotifications}} </td>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> ID </th>
+            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="smsNotifications">
+            <th mat-header-cell *matHeaderCellDef> SMS </th>
+            <td mat-cell *matCellDef="let element"> {{element.smsNotifications}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </section>
+    </mat-tab>
+  </mat-tab-group>
+
+
+
+
+
 </section>
