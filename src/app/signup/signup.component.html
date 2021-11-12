@@ -54,6 +54,10 @@
             *ngIf="signUpForm.get(['accepttandc'])?.touched && signUpForm.get(['accepttandc'])?.hasError('required')">
             T&Cs is <strong>required</strong>
         </mat-error>
+        <mat-error
+            *ngIf="signUpForm.get(['accepttandc'])?.hasError('notAccepted')">
+            T&Cs is <strong>required</strong>
+        </mat-error>
         <a href="https://privacy.didomi.io/en/" target="_blank">Read T&Cs
         </a>
 

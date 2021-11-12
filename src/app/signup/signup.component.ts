@@ -19,10 +19,10 @@ export class SignupComponent implements OnInit {
   passwordInput!: ElementRef;
 
   signUpForm = new FormGroup({
-      firstname: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required),
+      firstname: new FormControl('', ),
+      password: new FormControl('', ),
       email: new FormControl('', [Validators.required, Validators.email]),
-      lastname: new FormControl('', Validators.required),
+      lastname: new FormControl('', ),
       accepttandc: new FormControl('', [Validators.required])
   });
 
@@ -41,8 +41,7 @@ export class SignupComponent implements OnInit {
   }
 
   signUpButtonClick(evt: MouseEvent) {  
-    console.log('sign up botton', evt);
-    console.log('this.signUpForm.value', this.signUpForm.value);
+    console.log('this.signUpForm', this.signUpForm);
     if (this.signUpForm.valid) {
       this.callerService.signUpUser(this.signUpForm.value).subscribe(
         (res: any) => {
@@ -67,8 +66,10 @@ export class SignupComponent implements OnInit {
         }
       )
     } else {
-      console.log('not signing up');
-      
+      console.log('not signing up')
+      if (this.signUpForm.get(['accepttandc'])?.status == "INVALID") {
+        this.signUpForm.get(['accepttandc'])?.setErrors({notAccepted: true})
+      }
     }
   }
 

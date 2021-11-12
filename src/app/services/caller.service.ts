@@ -47,7 +47,7 @@ export class CallerService {
     
     return this.http.post(environment.baseURL + URLPaths.userSignUp, userDetails, this.httpOptions)
     .pipe(
-      retry(1), // retry a failed request up to 3 times
+      retry(1), // retry a failed request once
       catchError(this.handleError) // then handle the error
     );
   }
@@ -57,7 +57,7 @@ export class CallerService {
     
     return this.http.post(environment.baseURL + URLPaths.userLogIn, userDetails, this.httpOptions)
     .pipe(
-      retry(1), // retry a failed request up to 3 times
+      retry(1), // retry a failed request once
       catchError(this.handleError) // then handle the error
     );
   }
@@ -67,7 +67,7 @@ export class CallerService {
     
     return this.http.post(environment.baseURL + URLPaths.newUserEvent, userDetails, this.httpOptions)
     .pipe(
-      retry(1), // retry a failed request up to 3 times
+      retry(1), // retry a failed request once
       catchError(this.handleError) // then handle the error
     );
   }
@@ -77,7 +77,7 @@ export class CallerService {
     
     return this.http.delete(environment.baseURL + URLPaths.deleteUser + userEmail, this.httpOptions)
     .pipe(
-      retry(1), // retry a failed request up to 3 times
+      retry(1),
       catchError(this.handleError) // then handle the error
     );
   }
