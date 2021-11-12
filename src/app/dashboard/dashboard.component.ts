@@ -28,7 +28,10 @@ export class DashboardComponent implements OnInit {
 
   notificationoptions: string[] = ['sms', 'email'];
 
+  panelOpenState = false;
+
   user: any = JSON.parse(new String(sessionStorage.getItem('domini_user_details')).toString());
+  displayedColumns: string[] = ['age', 'emailNotifications', 'smsNotifications', 'id'];
 
   consentFormGroup = new FormGroup({
     // buggy // https://stackoverflow.com/a/65165250/9259701

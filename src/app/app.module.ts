@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -56,6 +58,7 @@ import { DeleteAccountDialogComponent } from './delete-account-dialog/delete-acc
     MatDialogModule,
     MatSidenavModule,
     MatListModule,
+    MatExpansionModule,
     LayoutModule,
     MatSnackBarModule,
     MatProgressBarModule,
@@ -64,6 +67,7 @@ import { DeleteAccountDialogComponent } from './delete-account-dialog/delete-acc
     MatSelectModule,
     MatChipsModule,
     MatCardModule,
+    MatTableModule,
     MatTooltipModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,

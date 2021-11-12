@@ -28,3 +28,4 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 # TODOs
 * take global styles to styles .css and make it work
+* when logging out or navigatiing away from a page, close all notifications
