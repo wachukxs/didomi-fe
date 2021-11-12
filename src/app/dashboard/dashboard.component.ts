@@ -15,6 +15,8 @@ import { ConsentChangeEvent } from '../models/Event';
 import { EventState } from '../ngrx/app.state';
 import { Observable } from 'rxjs';
 import { EventActionTypes } from "../ngrx/actions/event.actions";
+import { debounceTime } from 'rxjs/operators';
+import { formatDistance } from 'date-fns';
 
 @Component({
   selector: 'app-dashboard',
@@ -39,11 +41,12 @@ export class DashboardComponent implements OnInit {
   addNewEvent(emailnotifications: boolean, smsnotifications: boolean) {
     this.store.dispatch({
       type: EventActionTypes.ADD_EVENT,
-      payload: <ConsentChangeEvent> {
-        emailnotifications: emailnotifications,
-        smsnotifications: smsnotifications,
-        email: this.user.email
-      }
+      payload: [{
+        emailNotifications: emailnotifications,
+        smsNotifications: smsnotifications,
+        id: this.user.email,
+        age: formatDistance(new Date(), new Date(), { addSuffix: true, includeSeconds: true })
+      }]
     });
   }
 
@@ -72,7 +75,9 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.consentFormGroup.valueChanges.subscribe((value) => {
+    this.consentFormGroup.valueChanges.pipe(
+      debounceTime(500)
+    ).subscribe((value) => {
       console.log(value);
 
       this.addNewEvent(value.consentoptions.email, value.consentoptions.sms)
@@ -105,7 +110,6 @@ export class DashboardComponent implements OnInit {
 
   get consentOptionsFormGroup(): FormGroup {
     return this.consentFormGroup.get(['consentoptions']) as FormGroup;
-    // return this.consentFormGroup.controls['consentoptions'] as FormGroup;
   }
 
   // should be like a central messaging service

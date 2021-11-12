@@ -1,8 +1,6 @@
 export interface ConsentChangeEvent {
-  emailnotifications: boolean;
-  smsnotifications: boolean;
-  email: string;
+  emailNotifications: boolean;
+  smsNotifications: boolean;
+  id?: string;
   time?: string;
 }
-
-

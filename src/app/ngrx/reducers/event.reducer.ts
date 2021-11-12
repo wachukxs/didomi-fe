@@ -11,7 +11,7 @@ import { EventState } from '../app.state';
 class AddEventAction implements Action {
   // https://stackoverflow.com/a/66265684/9259701
   readonly type = EventActionTypes.ADD_EVENT;
-  constructor(public payload: ConsentChangeEvent) {}
+  constructor(public payload: Array<ConsentChangeEvent>) {}
 }
 
 export const initialState: EventState = {
@@ -27,7 +27,7 @@ export function newEventReducer(
     case EventActionTypes.ADD_EVENT:
       console.log('new action');
       console.log('state', state, 'action', action);
-      return [...state, action.payload];
+      return [...state, ...action.payload];
     default:
       // for initializing
       return [...state];

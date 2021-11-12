@@ -37,11 +37,11 @@
     <mat-tab label="Overview">
       <section class="main">
 
-        <div> {{ eventsTrail | async | json }} </div>
+        <!-- <div> {{ eventsTrail | async | json }} </div> -->
 
         <h4 class="mat-h4">Review your event perference history.</h4>
 
-        <table mat-table [dataSource]="user?.consents" class="mat-elevation-z8">
+        <table mat-table [dataSource]="eventsTrail" class="mat-elevation-z8">
 
           <!--- Note that these columns can be defined in any order.
                   The actual rendered columns are set as a property on the row definition" -->
@@ -76,9 +76,5 @@
       </section>
     </mat-tab>
   </mat-tab-group>
-
-
-
-
 
 </section>
