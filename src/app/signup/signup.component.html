@@ -5,6 +5,20 @@
 
     <form [formGroup]="signUpForm" class="m-l-30" name="sign-up-form">
         <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input type="email" formControlName="email" matInput required>
+            <mat-error *ngIf="signUpForm.get(['email'])?.hasError('notUnique')">
+                <strong>Email</strong> already exists
+            </mat-error>
+            <mat-error
+                *ngIf="signUpForm.get(['email'])?.hasError('email') && !signUpForm.get(['email'])?.hasError('required')">
+                Please enter a valid email address
+            </mat-error>
+            <mat-error *ngIf="signUpForm.get(['email'])?.hasError('required')">
+                Email is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
             <mat-label>First name</mat-label>
             <input formControlName="firstname" matInput>
             <mat-error *ngIf="signUpForm.get(['firstname'])?.hasError('required')">
@@ -19,21 +33,6 @@
             </mat-error>
         </mat-form-field>
 
-
-        <mat-form-field appearance="fill">
-            <mat-label>Email</mat-label>
-            <input type="email" formControlName="email" matInput>
-            <mat-error *ngIf="signUpForm.get(['email'])?.hasError('notUnique')">
-                <strong>Email</strong> already exists
-            </mat-error>
-            <mat-error
-                *ngIf="signUpForm.get(['email'])?.hasError('email') && !signUpForm.get(['email'])?.hasError('required')">
-                Please enter a valid email address
-            </mat-error>
-            <mat-error *ngIf="signUpForm.get(['email'])?.hasError('required')">
-                Email is <strong>required</strong>
-            </mat-error>
-        </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Password</mat-label>
             <input #passwordInput formControlName="password" type="password" matInput>

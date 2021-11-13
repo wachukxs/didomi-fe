@@ -1,9 +1,9 @@
 export interface ConsentChangeEvent {
-  emailNotifications: boolean;
-  smsNotifications: boolean;
+  key?: string;
+  enabled: boolean;
   userId?: string; // should be complusory
   age?: string;
-  id?: string;
+  id: string;
   userEmail?: string; // should be complusory
 
   createdAt?: string;

@@ -19,10 +19,12 @@
           <mat-card-content>
             <p>Consent preference:</p>
 
-            <div class="checkboxes-grid-options" [formGroup]="consentOptionsFormGroup">
-              <mat-checkbox [formControlName]="option" color="primary" class="option"
-                *ngFor="let option of notificationoptions">
-                {{option}}
+            <div class="checkboxes-grid-options">
+              <mat-checkbox [formControl]="email_notifications" color="primary" class="option">
+                email
+              </mat-checkbox>
+              <mat-checkbox [formControl]="sms_notifications" color="primary" class="option">
+                sms
               </mat-checkbox>
             </div>
 
@@ -44,27 +46,27 @@
         <table mat-table [dataSource]="eventsTrail$" class="mat-elevation-z8">
 
           <!-- Position Column -->
+          <ng-container matColumnDef="sn">
+            <th mat-header-cell *matHeaderCellDef> SN </th>
+            <td mat-cell *matCellDef="let element"> {{element.sn}} </td>
+          </ng-container>
+
+          <!-- Name Column -->
           <ng-container matColumnDef="age">
             <th mat-header-cell *matHeaderCellDef> Age </th>
             <td mat-cell *matCellDef="let element"> {{element.age}} </td>
           </ng-container>
 
-          <!-- Name Column -->
-          <ng-container matColumnDef="emailNotifications">
-            <th mat-header-cell *matHeaderCellDef> EMAIL </th>
-            <td mat-cell *matCellDef="let element"> {{element.emailNotifications}} </td>
-          </ng-container>
-
           <!-- Weight Column -->
           <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef> ID </th>
+            <th mat-header-cell *matHeaderCellDef> Medium </th>
             <td mat-cell *matCellDef="let element"> {{element.id}} </td>
           </ng-container>
 
           <!-- Symbol Column -->
-          <ng-container matColumnDef="smsNotifications">
-            <th mat-header-cell *matHeaderCellDef> SMS </th>
-            <td mat-cell *matCellDef="let element"> {{element.smsNotifications}} </td>
+          <ng-container matColumnDef="enabled">
+            <th mat-header-cell *matHeaderCellDef> Enabled </th>
+            <td mat-cell *matCellDef="let element"> {{element.enabled}} </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

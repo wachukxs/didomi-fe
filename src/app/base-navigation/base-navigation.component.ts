@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CallerService } from '../services/caller.service';
 
 @Component({
   selector: 'app-base-navigation',
@@ -8,15 +9,23 @@ import { Router } from '@angular/router';
 })
 export class BaseNavigationComponent implements OnInit {
 
-  constructor(private router: Router,) { }
+  constructor(private router: Router, private callerService: CallerService) { }
 
   ngOnInit(): void {
   }
 
   // should be a shared service
   logOutUser(): void {
-    sessionStorage.removeItem('domini_user_details')
-    this.router.navigate(['/'])
+    this.callerService.logOutUser().subscribe({
+      next: (res) => {
+        sessionStorage.removeItem('domini_user_details')
+        this.router.navigate(['/'])
+      },
+      error: (err) => {
+        this.router.navigate(['/']) // maybe show a message
+      }
+    })
+    
   }
 
 }

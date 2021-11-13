@@ -81,4 +81,14 @@ export class CallerService {
       catchError(this.handleError) // then handle the error
     );
   }
+
+  logOutUser(): Observable<any> {
+    console.log('logging out via', environment.baseURL + URLPaths.userLogOut);
+    
+    return this.http.get(environment.baseURL + URLPaths.userLogOut, this.httpOptions)
+    .pipe(
+      retry(1), // retry a failed request once
+      catchError(this.handleError) // then handle the error
+    );
+  }
 }

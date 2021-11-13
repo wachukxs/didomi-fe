@@ -1,7 +1,7 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { CallerService } from '../../services/caller.service';
 import { Injectable } from '@angular/core';
-import { catchError, map, switchMap, concatMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, concatMap, tap, filter } from 'rxjs/operators';
 import { of, EMPTY } from 'rxjs';
 import {
   addNewEvent,
@@ -28,20 +28,12 @@ export class EventEffects {
         (data) =>
           this.callerService.updateUserConsentPreference(data).pipe(
             tap((res) => console.log(`BEFORE MAP:`, res.body)),
+            filter(res => res.status == 200),
             map((res) => ({type: EventActionTypes.ADD_EVENT_V2, perference: res.body }) ),
 
-            catchError(() => of(newEventChangeError())),
-            catchError(() => EMPTY),
+            // catchError(() => of(newEventChangeError())),
+            // catchError(() => EMPTY),
           )
-
-        // this.callerService.updateUserConsentPreference(data).subscribe({
-        //     // on successful emissions
-        //     next: (res) => addNewEvent( { perference: res.body } ),
-        //     // on errors
-        //     error: (error) => of(newEventChangeError()),
-        //     // called once on completion
-        //     complete: () => console.log('complete!')
-        // })
       )
     )
   );

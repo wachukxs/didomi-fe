@@ -14,11 +14,10 @@ import { Store } from '@ngrx/store';
 import { ConsentChangeEvent } from '../models/Event';
 import { EventState } from '../ngrx/app.state';
 import { Observable } from 'rxjs';
-// import { EventActionTypes } from "../ngrx/actions/event.actions";
+import { EventActionTypes } from "../ngrx/actions/event.actions";
 import { debounceTime, map } from 'rxjs/operators';
-import { formatDistance } from 'date-fns';
 import { selectPerferences } from '../ngrx/selectors/event.selector';
-import { newEventChange } from '../ngrx/actions/event.actions';
+import { newEventChange, retrievedEventsList } from '../ngrx/actions/event.actions';
 
 @Component({
   selector: 'app-dashboard',
@@ -41,23 +40,14 @@ export class DashboardComponent implements OnInit {
     
   }
 
-  _addNewEvent(emailnotifications: boolean, smsnotifications: boolean) {
-    // this.store.dispatch({
-    //   type: EventActionTypes.ADD_EVENT,
-    //   payload: [{
-    //     emailNotifications: emailnotifications,
-    //     smsNotifications: smsnotifications,
-    //     id: this.user.email,
-    //     age: formatDistance(new Date(), new Date(), { addSuffix: true, includeSeconds: true })
-    //   }]
-    // });
+  _addNewEvent(notification: string, value: boolean) {
 
     this.store.dispatch(newEventChange({
       perference: {
-        emailNotifications: emailnotifications,
-        smsNotifications: smsnotifications,
-        userId: this.user.id,
-        userEmail: this.user.email
+        id: notification,
+        enabled: value,
+        userEmail: this.user.email,
+        userId: this.user.id
       }
     }))
   }
@@ -67,32 +57,22 @@ export class DashboardComponent implements OnInit {
   panelOpenState = false;
 
   user: any = JSON.parse(new String(sessionStorage.getItem('domini_user_details')).toString());
-  displayedColumns: string[] = ['age', 'emailNotifications', 'smsNotifications', 'id'];
+  displayedColumns: string[] = ['sn', 'age', 'enabled', 'id'];
 
-  consentFormGroup = new FormGroup({
-    // buggy // https://stackoverflow.com/a/65165250/9259701
-    // consentoptions: new FormGroup(
-    //   Object.assign(
-    //     {},
-    //     ...Array.from(this.notificationoptions, (v) => ({ [v]: false }))
-    //   ),
-    //   [] // validators
-    // ),
-    consentoptions: this.formBuilder.group(
-      Object.assign({}, ...Array.from(this.notificationoptions, (v) => ({[v]: false}) ))
-    , [Validators.required]),
-    email: new FormControl(this.user?.email, [Validators.required, Validators.email]),
-    userid: new FormControl(this.user?.id, [Validators.required]),
-  });
+  email_notifications = new FormControl('', [Validators.required, Validators.email]);
+  sms_notifications = new FormControl('', [Validators.required]);
 
   ngOnInit(): void {
 
-    this.consentFormGroup.valueChanges.pipe(
+    console.log('this.user.consents', this.user.consents);
+    
+
+    this.email_notifications.valueChanges.pipe(
       debounceTime(500)
     ).subscribe((value) => {
       console.log(value);
 
-      this._addNewEvent(value.consentoptions.email, value.consentoptions.sms)
+      this._addNewEvent('email_notifications', value)
 
       // should we induce a delay so the api isn't called too much
 
@@ -118,10 +98,24 @@ export class DashboardComponent implements OnInit {
     }, (err) => {
       console.error('jeez', err);
     })
-  }
 
-  get consentOptionsFormGroup(): FormGroup {
-    return this.consentFormGroup.get(['consentoptions']) as FormGroup;
+
+    this.sms_notifications.valueChanges.pipe(
+      debounceTime(500)
+    ).subscribe((value) => {
+      console.log(value);
+
+      this._addNewEvent('sms_notifications', value)
+
+    }, (err) => {
+      console.error('jeez', err);
+    })
+
+    this.store.dispatch({type: EventActionTypes.INITIALIZE_EVENT_V2,
+      perferences: this.user.consents
+    })
+
+    this.store.dispatch(retrievedEventsList({perferences: this.user.consents}))
   }
 
   // should be like a central messaging service
