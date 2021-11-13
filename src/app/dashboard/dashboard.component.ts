@@ -17,7 +17,7 @@ import { Observable } from 'rxjs';
 // import { EventActionTypes } from "../ngrx/actions/event.actions";
 import { debounceTime, map } from 'rxjs/operators';
 import { formatDistance } from 'date-fns';
-import { selectPerferences, selectPerferencesFeature } from '../ngrx/selectors/event.selector';
+import { selectPerferences } from '../ngrx/selectors/event.selector';
 import { newEventChange } from '../ngrx/actions/event.actions';
 
 @Component({
@@ -37,12 +37,7 @@ export class DashboardComponent implements OnInit {
     private dialog: MatDialog,
     private store: Store<EventState>
   ) {
-    // this.eventsTrail$ =  this.store.pipe(map(state => state.perferences));
     this.eventsTrail$ =  this.store.select(state => selectPerferences(state));
-    this.store.select(state => state.perferences).subscribe((val) => {
-      console.log('got', val);
-    })
-    this.eventsTrail$.subscribe(val => console.log('what', val))
     
   }
 
