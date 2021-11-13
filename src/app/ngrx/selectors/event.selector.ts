@@ -2,9 +2,12 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { EventState } from '../app.state';
 import { ConsentChangeEvent } from '../../models/Event';
 
-export const selectMainAppState = (state: EventState) => state
+export const selectPerferencesFeature = (state: EventState) => state.perferences
 
 export const selectPerferences = createSelector(
-    selectMainAppState,
-    (state: EventState) => state.perferences
+    selectPerferencesFeature,
+    (_state: any) => {
+        console.log('_perferences', _state.perferences);
+        return _state.perferences
+    }
 );

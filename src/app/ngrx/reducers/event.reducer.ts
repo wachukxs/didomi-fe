@@ -38,17 +38,15 @@ export const initialState: EventState = {
 
 export const addEventReducer = createReducer(
   initialState,
-  on(addNewEvent, (state: EventState, { perference }) => {
-    console.log('++++', state, perference);
-
-    return { perferences: [...state.perferences, perference] };
-  })
+  on(addNewEvent, (state: EventState, { perference }) => ({
+    perferences: [...state.perferences, perference],
+  }))
 );
 
 export const eventsInitReducer = createReducer(
   initialState,
   on(retrievedEventsList, (state: EventState, { perferences }) => ({
-    perferences: [...perferences],
+    perferences: [...state.perferences, ...perferences],
   }))
 );
 
