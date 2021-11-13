@@ -2,7 +2,10 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { EventState } from '../ngrx/app.state';
 import { CallerService } from '../services/caller.service';
+import { Store } from '@ngrx/store';
+import { retrievedEventsList } from '../ngrx/actions/event.actions';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +16,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private callerService: CallerService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private store: Store<EventState>
   ) {}
 
   loginForm = new FormGroup({
@@ -50,6 +54,9 @@ export class LoginComponent implements OnInit {
               'domini_user_details',
               JSON.stringify(res.body)
             );
+            this.store.dispatch(retrievedEventsList({
+              perferences: res.body.consents, // if it's empty ??
+            }));
             this.router.navigate(['/dashboard']);
           }
         },

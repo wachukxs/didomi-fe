@@ -42,7 +42,7 @@ export class CallerService {
     return throwError(error); // 'Something bad happened; please try again later.'
   }
 
-  signUpUser(userDetails: UserSignUpDetails) {
+  signUpUser(userDetails: UserSignUpDetails): Observable<any> {
     console.log('signing up via', environment.baseURL + URLPaths.userSignUp);
     
     return this.http.post(environment.baseURL + URLPaths.userSignUp, userDetails, this.httpOptions)
@@ -52,7 +52,7 @@ export class CallerService {
     );
   }
 
-  logInUser(userDetails: UserLoginDetails) {
+  logInUser(userDetails: UserLoginDetails): Observable<any> {
     console.log('logging in up via', environment.baseURL + URLPaths.userLogIn);
     
     return this.http.post(environment.baseURL + URLPaths.userLogIn, userDetails, this.httpOptions)
@@ -62,7 +62,7 @@ export class CallerService {
     );
   }
 
-  updateUserConsentPreference(userDetails: any) {
+  updateUserConsentPreference(userDetails: any): Observable<any> {
     console.log('updating user consent perference', environment.baseURL + URLPaths.newUserEvent);
     
     return this.http.post(environment.baseURL + URLPaths.newUserEvent, userDetails, this.httpOptions)
@@ -72,7 +72,7 @@ export class CallerService {
     );
   }
 
-  deleteUserAccount(userEmail: string) {
+  deleteUserAccount(userEmail: string): Observable<any> {
     console.log('deleting user account', environment.baseURL + URLPaths.deleteUser + userEmail);
     
     return this.http.delete(environment.baseURL + URLPaths.deleteUser + userEmail, this.httpOptions)

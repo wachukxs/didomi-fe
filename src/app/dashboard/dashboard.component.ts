@@ -14,9 +14,11 @@ import { Store } from '@ngrx/store';
 import { ConsentChangeEvent } from '../models/Event';
 import { EventState } from '../ngrx/app.state';
 import { Observable } from 'rxjs';
-import { EventActionTypes } from "../ngrx/actions/event.actions";
+// import { EventActionTypes } from "../ngrx/actions/event.actions";
 import { debounceTime } from 'rxjs/operators';
 import { formatDistance } from 'date-fns';
+import { selectMainAppState, selectPerferences } from '../ngrx/selectors/event.selector';
+import { newEventChange } from '../ngrx/actions/event.actions';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,7 +27,7 @@ import { formatDistance } from 'date-fns';
 })
 export class DashboardComponent implements OnInit {
 
-  eventsTrail: Observable<Array<ConsentChangeEvent>>;
+  eventsTrail$: Observable<Array<ConsentChangeEvent>>;
 
   constructor(
     private router: Router,
@@ -35,19 +37,35 @@ export class DashboardComponent implements OnInit {
     private dialog: MatDialog,
     private store: Store<EventState>
   ) {
-    this.eventsTrail = this.store.select(state => state.events);
+    // this.eventsTrail$ =  this.store.select(selectPerferences)
+    this.eventsTrail$ = this.store.select((state) => state.perferences);
+
+    this.store.select(state => state.perferences).subscribe((val) => {
+      console.log('got', val);
+    })
+    this.eventsTrail$.subscribe(val => console.log('what', val))
+    
   }
 
-  addNewEvent(emailnotifications: boolean, smsnotifications: boolean) {
-    this.store.dispatch({
-      type: EventActionTypes.ADD_EVENT,
-      payload: [{
+  _addNewEvent(emailnotifications: boolean, smsnotifications: boolean) {
+    // this.store.dispatch({
+    //   type: EventActionTypes.ADD_EVENT,
+    //   payload: [{
+    //     emailNotifications: emailnotifications,
+    //     smsNotifications: smsnotifications,
+    //     id: this.user.email,
+    //     age: formatDistance(new Date(), new Date(), { addSuffix: true, includeSeconds: true })
+    //   }]
+    // });
+
+    this.store.dispatch(newEventChange({
+      perference: {
         emailNotifications: emailnotifications,
         smsNotifications: smsnotifications,
-        id: this.user.email,
-        age: formatDistance(new Date(), new Date(), { addSuffix: true, includeSeconds: true })
-      }]
-    });
+        userId: this.user.id,
+        userEmail: this.user.email
+      }
+    }))
   }
 
   notificationoptions: string[] = ['sms', 'email'];
@@ -80,11 +98,11 @@ export class DashboardComponent implements OnInit {
     ).subscribe((value) => {
       console.log(value);
 
-      this.addNewEvent(value.consentoptions.email, value.consentoptions.sms)
+      this._addNewEvent(value.consentoptions.email, value.consentoptions.sms)
 
       // should we induce a delay so the api isn't called too much
 
-      this.callerService.updateUserConsentPreference(value).subscribe(
+      /* this.callerService.updateUserConsentPreference(value).subscribe(
         (res: any) => {
           console.log('event update response', res);
           if (res.status == 200) {
@@ -102,7 +120,7 @@ export class DashboardComponent implements OnInit {
           );
           
         }
-      )
+      ) */
     }, (err) => {
       console.error('jeez', err);
     })

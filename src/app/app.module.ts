@@ -35,9 +35,12 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { DeleteAccountDialogComponent } from './delete-account-dialog/delete-account-dialog.component';
 
-import { newEventReducer } from './ngrx/reducers/event.reducer';
+// import { newEventReducer } from './ngrx/reducers/event.reducer';
+// import { reducers } from './ngrx/reducers/index';
 import { StoreModule } from '@ngrx/store';
-import { reducers } from './ngrx/reducers/index'
+import { EffectsModule } from '@ngrx/effects';
+import { EventEffects } from "../app/ngrx/effects/event.effect";
+import { addEventReducer, eventsInitReducer } from './ngrx/reducers/event.reducer';
 
 @NgModule({
   declarations: [
@@ -81,8 +84,14 @@ import { reducers } from './ngrx/reducers/index'
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
     }),
-    // StoreModule.forRoot({event: newEventReducer}) // will fix later
-    StoreModule.forRoot(reducers)
+    StoreModule.forRoot({
+      perferences: addEventReducer
+    }),
+    // StoreModule.forRoot({
+    //   perferences: eventsInitReducer
+    // }),
+    // StoreModule.forRoot(reducers),
+    EffectsModule.forRoot([EventEffects]), // // this is necessary for `EventService` to have access to the HttpClient
   ],
   providers: [],
   bootstrap: [AppComponent]
