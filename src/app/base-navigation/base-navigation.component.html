@@ -65,8 +65,8 @@
                     <mat-icon>how_to_reg</mat-icon>
                 </button>
 
-                <a mat-button (click)="logOutUser()" class="hidden-mobile header-action">Log out</a>
-                <button (click)="logOutUser()" mat-icon-button class="hidden-desktop header-action"
+                <a *ngIf="showLogOut" mat-button (click)="logOutUser()" class="hidden-mobile header-action">Log out</a>
+                <button *ngIf="showLogOut" (click)="logOutUser()" mat-icon-button class="hidden-desktop header-action"
                 matTooltip="Logout"
                 aria-label="Menu option that logs you out"
                 >

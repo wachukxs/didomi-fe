@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSortModule } from '@angular/material/sort';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTableModule } from '@angular/material/table';
@@ -40,7 +43,7 @@ import { DeleteAccountDialogComponent } from './delete-account-dialog/delete-acc
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { EventEffects } from "../app/ngrx/effects/event.effect";
-import { addEventReducer, eventsInitReducer } from './ngrx/reducers/event.reducer';
+import { addEventReducer } from './ngrx/reducers/event.reducer';
 
 @NgModule({
   declarations: [
@@ -66,8 +69,11 @@ import { addEventReducer, eventsInitReducer } from './ngrx/reducers/event.reduce
     MatDialogModule,
     MatSidenavModule,
     MatListModule,
+    MatPaginatorModule,
     MatExpansionModule,
     LayoutModule,
+    MatSortModule,
+    MatProgressSpinnerModule,
     MatTabsModule,
     MatSnackBarModule,
     MatProgressBarModule,
@@ -87,10 +93,6 @@ import { addEventReducer, eventsInitReducer } from './ngrx/reducers/event.reduce
     StoreModule.forRoot({
       perferences: addEventReducer
     }),
-    // StoreModule.forRoot({
-    //   perferences: eventsInitReducer
-    // }),
-    // StoreModule.forRoot(reducers),
     EffectsModule.forRoot([EventEffects]), // // this is necessary for `EventService` to have access to the HttpClient
   ],
   providers: [],

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { EventState } from '../ngrx/app.state';
 import { CallerService } from '../services/caller.service';
+import { Store } from '@ngrx/store';
+import { EventActionTypes, retrievedEventsList, clearEvent } from '../ngrx/actions/event.actions';
 
 @Component({
   selector: 'app-base-navigation',
@@ -9,7 +12,7 @@ import { CallerService } from '../services/caller.service';
 })
 export class BaseNavigationComponent implements OnInit {
 
-  constructor(private router: Router, private callerService: CallerService) { }
+  constructor(private router: Router, private callerService: CallerService, private store: Store<EventState>) { }
 
   ngOnInit(): void {
   }
@@ -19,6 +22,7 @@ export class BaseNavigationComponent implements OnInit {
     this.callerService.logOutUser().subscribe({
       next: (res) => {
         sessionStorage.removeItem('domini_user_details')
+        this.store.dispatch(clearEvent({perference: {id: '', enabled: false }}))
         this.router.navigate(['/'])
       },
       error: (err) => {
@@ -26,6 +30,10 @@ export class BaseNavigationComponent implements OnInit {
       }
     })
     
+  }
+
+  get showLogOut(): boolean {
+    return this.router.url.includes('/dashboard')
   }
 
 }

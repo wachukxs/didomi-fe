@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -13,11 +13,45 @@ import { DeleteAccountDialogComponent } from '../delete-account-dialog/delete-ac
 import { Store } from '@ngrx/store';
 import { ConsentChangeEvent } from '../models/Event';
 import { EventState } from '../ngrx/app.state';
-import { Observable } from 'rxjs';
-import { EventActionTypes } from "../ngrx/actions/event.actions";
-import { debounceTime, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { EventActionTypes } from '../ngrx/actions/event.actions';
+import { debounceTime, filter, map, tap } from 'rxjs/operators';
 import { selectPerferences } from '../ngrx/selectors/event.selector';
-import { newEventChange, retrievedEventsList } from '../ngrx/actions/event.actions';
+import {
+  newEventChange,
+  retrievedEventsList,
+} from '../ngrx/actions/event.actions';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { DataSource, CollectionViewer } from '@angular/cdk/collections';
+
+
+
+export class PerferenceTableDataSource implements DataSource<ConsentChangeEvent> {
+  totalPerference: number = 0
+  constructor(private store: Store<EventState>) { }
+
+  private lessonsSubject = new BehaviorSubject<ConsentChangeEvent[]>([]);
+  
+  connect(collectionViewer: CollectionViewer): Observable<ConsentChangeEvent[]> {
+    return this.lessonsSubject.asObservable() // this.store.select((state) => selectPerferences(state))
+  }
+
+  loadDataSubset(start: number = 0, end: number = 5, size: number = 0) {
+    this.store.select((state) => selectPerferences(state))
+    .subscribe(p => {
+      this.totalPerference = p.length
+      console.log('breee', p.slice(start, end));
+      this.lessonsSubject.next(p.slice(start, end))
+    })
+  }
+
+  disconnect(collectionViewer: CollectionViewer): void {
+    this.store.complete()
+  }
+}
+
 
 @Component({
   selector: 'app-dashboard',
@@ -25,8 +59,12 @@ import { newEventChange, retrievedEventsList } from '../ngrx/actions/event.actio
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
+  // eventsTrail$: Observable<Array<ConsentChangeEvent>>; // MatTableDataSource will alredy produce an array
 
-  eventsTrail$: Observable<Array<ConsentChangeEvent>>;
+  dataSource: PerferenceTableDataSource;
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private router: Router,
@@ -36,47 +74,71 @@ export class DashboardComponent implements OnInit {
     private dialog: MatDialog,
     private store: Store<EventState>
   ) {
-    this.eventsTrail$ =  this.store.select(state => selectPerferences(state));
+    
+    // this.eventsTrail$ = this.store.select((state) => selectPerferences(state));
+
+    this.dataSource = new PerferenceTableDataSource(this.store);
+
+    this.store.select((state) => selectPerferences(state)).subscribe(val => {
+      console.log('everr', val);
+    })
     
   }
 
-  _addNewEvent(notification: string, value: boolean) {
+     ngAfterViewInit() {
 
-    this.store.dispatch(newEventChange({
-      perference: {
-        id: notification,
-        enabled: value,
-        userEmail: this.user.email,
-        userId: this.user.id
-      }
-    }))
+      // this.dataSource.paginator = this.paginator;
+      // this.dataSource.sort = this.sort;
+      this.paginator.page
+            .pipe(
+                tap((d) => {
+                  this.dataSource.loadDataSubset((d.pageIndex * d.pageSize), (d.pageIndex * d.pageSize) + d.pageSize)
+                })
+            )
+            .subscribe();
+    }
+
+  _addNewEvent(notification: string, value: boolean) {
+    this.store.dispatch(
+      newEventChange({
+        perference: {
+          id: notification,
+          enabled: value,
+          userEmail: this.user.email,
+          userId: this.user.id,
+        },
+      })
+    );
   }
 
   notificationoptions: string[] = ['sms', 'email'];
 
   panelOpenState = false;
 
-  user: any = JSON.parse(new String(sessionStorage.getItem('domini_user_details')).toString());
-  displayedColumns: string[] = ['sn', 'age', 'enabled', 'id'];
+  user: any = JSON.parse(
+    new String(sessionStorage.getItem('domini_user_details')).toString()
+  );
+  displayedColumns: string[] = ['sn', 'age', 'id', 'enabled'];
 
-  email_notifications = new FormControl('', [Validators.required, Validators.email]);
+  email_notifications = new FormControl('', [
+    Validators.required,
+    Validators.email,
+  ]);
   sms_notifications = new FormControl('', [Validators.required]);
 
   ngOnInit(): void {
-
     console.log('this.user.consents', this.user.consents);
-    
+    this.dataSource.loadDataSubset()
 
-    this.email_notifications.valueChanges.pipe(
-      debounceTime(500)
-    ).subscribe((value) => {
-      console.log(value);
+    this.email_notifications.valueChanges.pipe(debounceTime(500)).subscribe(
+      (value) => {
+        console.log(value);
 
-      this._addNewEvent('email_notifications', value)
+        this._addNewEvent('email_notifications', value);
 
-      // should we induce a delay so the api isn't called too much
+        // should we induce a delay so the api isn't called too much
 
-      /* this.callerService.updateUserConsentPreference(value).subscribe(
+        /* this.callerService.updateUserConsentPreference(value).subscribe(
         (res: any) => {
           console.log('event update response', res);
           if (res.status == 200) {
@@ -95,27 +157,33 @@ export class DashboardComponent implements OnInit {
           
         }
       ) */
-    }, (err) => {
-      console.error('jeez', err);
-    })
+      },
+      (err) => {
+        console.error('jeez', err);
+      }
+    );
 
+    this.sms_notifications.valueChanges.pipe(debounceTime(500)).subscribe(
+      (value) => {
+        console.log(value);
 
-    this.sms_notifications.valueChanges.pipe(
-      debounceTime(500)
-    ).subscribe((value) => {
-      console.log(value);
+        this._addNewEvent('sms_notifications', value);
+      },
+      (err) => {
+        console.error('jeez', err);
+      }
+    );
 
-      this._addNewEvent('sms_notifications', value)
+    if (this.user.consents) {
+      // this.store.dispatch({
+      //   type: EventActionTypes.INITIALIZE_EVENT_V2,
+      //   perferences: this.user.consents,
+      // });
 
-    }, (err) => {
-      console.error('jeez', err);
-    })
-
-    this.store.dispatch({type: EventActionTypes.INITIALIZE_EVENT_V2,
-      perferences: this.user.consents
-    })
-
-    this.store.dispatch(retrievedEventsList({perferences: this.user.consents}))
+      this.store.dispatch(
+        retrievedEventsList({ perferences: this.user.consents })
+      );
+    }
   }
 
   // should be like a central messaging service
@@ -126,26 +194,22 @@ export class DashboardComponent implements OnInit {
   openDeleteAccountDialog(): void {
     const dialogRef = this.dialog.open(DeleteAccountDialogComponent);
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         console.log(`Deleteing`);
         this.callerService.deleteUserAccount(this.user.email).subscribe(
           (res: any) => {
             console.log('account delete response', res);
             if (res.status == 200) {
-              sessionStorage.removeItem('domini_user_details')
-              this.router.navigate(['/']) // show a snack bar, saying we're sorry to see you go
+              sessionStorage.removeItem('domini_user_details');
+              this.router.navigate(['/']); // show a snack bar, saying we're sorry to see you go
             }
           },
           (err) => {
             console.error('=> account delete  err', err);
-            this.openSnackBar(
-              "Please try again.",
-              'OK'
-            );
-            
+            this.openSnackBar('Please try again.', 'OK');
           }
-        )
+        );
       }
     });
   }

@@ -3,6 +3,7 @@ import { ConsentChangeEvent } from '../../models/Event';
 
 export enum EventActionTypes {
   ADD_EVENT = '[Event] Add New event perference',
+  EMPTY_EVENT = '[Event] Clear event perference',
   ADD_EVENT_ERROR = '[Event] Add New event perference error',
   NEW_EVENT_CHANGE = '[Event] New event perference',
   INITIALIZE_EVENT = '[Event] Retrieve Events',
@@ -26,6 +27,11 @@ export const addNewEvent = createAction(
 
 export const newEventChange = createAction(
   EventActionTypes.NEW_EVENT_CHANGE,
+  props<{ perference: ConsentChangeEvent }>()
+);
+
+export const clearEvent = createAction(
+  EventActionTypes.EMPTY_EVENT,
   props<{ perference: ConsentChangeEvent }>()
 );
 

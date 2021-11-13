@@ -4,6 +4,7 @@ import {
   EventActionTypes,
   addNewEvent,
   retrievedEventsList,
+  clearEvent
 } from '../actions/event.actions';
 import { EventState } from '../app.state';
 
@@ -17,16 +18,12 @@ export const addEventReducer = createReducer(
   initialState,
   on(addNewEvent, (state: EventState, { perference }) => ({
     perferences: [...state.perferences, perference],
+  })),
+  on(clearEvent, (state: EventState) => ({
+    perferences: [],
+  })),
+  on(retrievedEventsList, (state: EventState, { perferences }) => ({
+    perferences: [...perferences],
   }))
 );
 
-export const eventsInitReducer = createReducer(
-  initialState,
-  on(retrievedEventsList, (state: EventState, { perferences }) => {
-      console.log('____', perferences);
-      
-      return {
-        perferences: [...state.perferences, ...perferences],
-      }
-  })
-);

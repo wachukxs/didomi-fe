@@ -43,7 +43,7 @@
 
         <h4 class="mat-h4">Review your event perference history.</h4>
 
-        <table mat-table [dataSource]="eventsTrail$" class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
           <!-- Position Column -->
           <ng-container matColumnDef="sn">
@@ -71,7 +71,11 @@
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          
         </table>
+        <mat-paginator [length]="dataSource.totalPerference" [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page">
+        </mat-paginator>
       </section>
     </mat-tab>
   </mat-tab-group>
