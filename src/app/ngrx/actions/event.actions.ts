@@ -32,7 +32,6 @@ export const newEventChange = createAction(
 
 export const clearEvent = createAction(
   EventActionTypes.EMPTY_EVENT,
-  props<{ perference: ConsentChangeEvent }>()
 );
 
 export const newEventChangeError = createAction(

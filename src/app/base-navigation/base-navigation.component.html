@@ -43,8 +43,8 @@
             <span class="nav-spacer"></span>
             <div class="space-header-actions">
 
-                <a mat-button routerLink="/dashboard" class="hidden-mobile header-action">Dashboard</a>
-                <button mat-icon-button routerLink="/dashboard" class="hidden-desktop header-action"
+                <a *ngIf="showDashboardLink" mat-button routerLink="/dashboard" class="hidden-mobile header-action">Dashboard</a>
+                <button *ngIf="showDashboardLink" mat-icon-button routerLink="/dashboard" class="hidden-desktop header-action"
                 matTooltip="Navigate to Dashboard"
                 aria-label="Menu option that navigates to your dashboard">
                     <mat-icon>dashboard</mat-icon>

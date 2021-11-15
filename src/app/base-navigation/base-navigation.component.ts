@@ -22,7 +22,7 @@ export class BaseNavigationComponent implements OnInit {
     this.callerService.logOutUser().subscribe({
       next: (res) => {
         sessionStorage.removeItem('domini_user_details')
-        this.store.dispatch(clearEvent({perference: {id: '', enabled: false }}))
+        this.store.dispatch(clearEvent())
         this.router.navigate(['/'])
       },
       error: (err) => {
@@ -34,6 +34,10 @@ export class BaseNavigationComponent implements OnInit {
 
   get showLogOut(): boolean {
     return this.router.url.includes('/dashboard')
+  }
+
+  get showDashboardLink(): boolean {
+    return sessionStorage.getItem('domini_user_details') && !this.router.url.includes('/dashboard') ? true : false;
   }
 
 }

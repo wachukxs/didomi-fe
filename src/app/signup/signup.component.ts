@@ -3,6 +3,9 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { CallerService } from '../services/caller.service';
+import { Store } from '@ngrx/store';
+import { clearEvent } from '../ngrx/actions/event.actions';
+import { EventState } from '../ngrx/app.state';
 
 @Component({
   selector: 'app-signup',
@@ -11,7 +14,7 @@ import { CallerService } from '../services/caller.service';
 })
 export class SignupComponent implements OnInit {
 
-  constructor(private router: Router, private callerService: CallerService, private _snackBar: MatSnackBar) { }
+  constructor(private store: Store<EventState>, private router: Router, private callerService: CallerService, private _snackBar: MatSnackBar) { }
 
   passwordInputIcon: string = 'visibility';
 
@@ -49,6 +52,7 @@ export class SignupComponent implements OnInit {
           if (res.status == 200 && res.statusText === "OK") {
 
             sessionStorage.setItem('domini_user_details', JSON.stringify(res.body))
+            this.store.dispatch(clearEvent());
             this.router.navigate(['/dashboard'])
             
           }
@@ -56,7 +60,7 @@ export class SignupComponent implements OnInit {
         (err) => {
           console.error('=> err', err);
           
-          if (err.error.name == "SequelizeUniqueConstraintError" && err.error.fields.includes('email')) {
+          if (err.status = 400) {
             // set error in email input
             this.signUpForm.get(['email'])?.setErrors({notUnique: true});
           } else {
