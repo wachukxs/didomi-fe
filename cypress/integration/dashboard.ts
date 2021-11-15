@@ -4,6 +4,7 @@ describe('Changing preference for existing account', () => {
     cy.fixture('example.json').as('user');
   });
 
+  // sign up a user
   beforeEach(function() {
     cy.visit('/');
 
