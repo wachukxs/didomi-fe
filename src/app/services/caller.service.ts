@@ -5,13 +5,14 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { UserSignUpDetails, UserLoginDetails } from '../models/User';
 import { URLPaths } from '../utils/constants.utils';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CallerService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private _snackBar: MatSnackBar) { }
 
   private httpOptions = { // maybe add timeout later
     headers: new HttpHeaders({
@@ -90,5 +91,13 @@ export class CallerService {
       retry(1), // retry a failed request once
       catchError(this.handleError) // then handle the error
     );
+  }
+
+  openSnackBar() {
+    this._snackBar.open(
+      "Preference updated.",
+      'OK'
+    );
+    // this._snackBar.open(message, action);
   }
 }

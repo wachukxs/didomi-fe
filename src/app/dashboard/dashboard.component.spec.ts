@@ -6,6 +6,8 @@ describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
 
+  // https://stackoverflow.com/a/48762624/9259701
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ DashboardComponent ]

@@ -58,7 +58,7 @@ export class PerferenceTableDataSource implements DataSource<ConsentChangeEvent>
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   // eventsTrail$: Observable<Array<ConsentChangeEvent>>; // MatTableDataSource will alredy produce an array
 
   dataSource: PerferenceTableDataSource;
@@ -189,6 +189,10 @@ export class DashboardComponent implements OnInit {
   // should be like a central messaging service
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action);
+  }
+
+  ngOnDestroy() { // close any open snackbar
+    this._snackBar._openedSnackBarRef?.dismiss()
   }
 
   openDeleteAccountDialog(): void {

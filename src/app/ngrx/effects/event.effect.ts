@@ -26,11 +26,11 @@ export class EventEffects {
       ofType(newEventChange),
       concatMap(
         (data) =>
-          this.callerService.updateUserConsentPreference(data).pipe(
+          this.callerService.updateUserConsentPreference(data).pipe( // use subscribe
             tap((res) => console.log(`BEFORE MAP:`, res.body)),
             filter(res => res.status == 200),
             map((res) => ({type: EventActionTypes.ADD_EVENT_V2, perference: res.body }) ),
-
+            tap(() => this.callerService.openSnackBar()),
             // catchError(() => of(newEventChangeError())),
             // catchError(() => EMPTY),
           )
