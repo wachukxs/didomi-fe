@@ -45,25 +45,25 @@
 
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
-          <!-- Position Column -->
+          <!-- sn Column -->
           <ng-container matColumnDef="sn">
             <th mat-header-cell *matHeaderCellDef> SN </th>
             <td mat-cell *matCellDef="let element"> {{element.sn}} </td>
           </ng-container>
 
-          <!-- Name Column -->
+          <!-- age Column -->
           <ng-container matColumnDef="age">
             <th mat-header-cell *matHeaderCellDef> Age </th>
             <td mat-cell *matCellDef="let element"> {{element.age}} </td>
           </ng-container>
 
-          <!-- Weight Column -->
+          <!-- id Column -->
           <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef> Medium </th>
             <td mat-cell *matCellDef="let element"> {{element.id}} </td>
           </ng-container>
 
-          <!-- Symbol Column -->
+          <!-- enabled Column -->
           <ng-container matColumnDef="enabled">
             <th mat-header-cell *matHeaderCellDef> Enabled </th>
             <td mat-cell *matCellDef="let element"> {{element.enabled}} </td>
